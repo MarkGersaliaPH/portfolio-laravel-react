@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use App\Models\ProjectSkills;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Str;
+use Image;
 class ProjectController extends Controller
 {
     /**
@@ -12,14 +14,21 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    
-    protected $root = 'Admin/Projects/';
+     
+    protected $rootComponent = 'Admin/Projects/';
+    protected $index_url = 'admin.projects.index';
 
+  
     public function index()
     {
         //
+        $data['data'] = Project::with(['skills'=>function($q){
+            $q->select('project_id','display');
+        }])->latest()->get();   
         
-        return inertia($this->root.'Index');
+        // $data['data'] = Project::with('')->latest()->get();   
+ 
+        return inertia($this->rootComponent.'Index',$data);
     }
 
     /**
@@ -41,6 +50,75 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         //
+        // $request->validate([
+        //     'title'=>'required',
+        //     'image'=>'required|image',
+        //     'description'=>'required',
+        //     'skills'=>'required',
+        //     'link'=>'required',
+        // ]);
+
+
+        
+      
+       
+        try {
+
+            if($request->hasFile('image')){   
+                $image = $this->processImage($request); 
+             }
+     
+           $project = Project::create([
+                'title' => $request->title,
+                'link' => $request->link,
+                'image'=>  $image,
+                'description'=>$request->description
+            ]);
+ 
+
+            if($request->has('skills')){ 
+                $skills = $request->get('skills'); 
+                $skills_with_id=[];
+               foreach ($skills as $key => $value) {
+                 array_push($skills_with_id,[
+                    'project_id'=>$project->id,
+                    'display'=>$value
+                ]); 
+               } 
+               ProjectSkills::insert($skills_with_id); 
+            }
+    
+
+            \DB::commit();
+        } catch (\Throwable $th) {
+            throw $th;
+            
+            \DB::rollback();
+        }
+
+        
+        return \Redirect::route($this->index_url)->with([
+            'type' => 'success',
+            'message' => 'Data has been created',
+        ]);
+
+
+    }
+
+
+    public function processImage($request){
+        $image = $request->file('image');
+        $filename = Str::slug($request->title).'.'.$image->extension();
+     
+        $filePath = public_path('/images/projects');
+        $img = Image::make($image->path());
+         // resize the image to a height of 200 and constrain aspect ratio (auto width)
+            $img->resize(null, 500, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            $img->resizeCanvas(1000, 500); 
+        $img->save($filePath.'/'.$filename); 
+        return $image = '/images/projects/'.$filename;
     }
 
     /**
@@ -75,6 +153,48 @@ class ProjectController extends Controller
     public function update(Request $request, Project $project)
     {
         //
+        
+        try { 
+        
+            if($request->hasFile('image')){   
+                $image = $this->processImage($request);   
+                $project->image = $image;
+             }
+ 
+        
+            $allRequest = $request->except('image');
+            // $allRequest['link'] = 'http://'.$allRequest['link']; 
+            $project->update($allRequest);
+ 
+
+            if($request->has('skills')){ 
+            ProjectSkills::where('project_id',$project->id)->delete();
+
+                $skills = $request->get('skills'); 
+                $skills_with_id=[];
+               foreach ($skills as $key => $value) {
+                 array_push($skills_with_id,[
+                    'project_id'=>$project->id,
+                    'display'=>$value
+                ]); 
+               } 
+               ProjectSkills::insert($skills_with_id); 
+            }
+    
+             
+            \DB::commit();
+        } catch (\Throwable $th) {
+            throw $th;
+            
+            \DB::rollback();
+        }
+
+        
+        return \Redirect::route($this->index_url)->with([
+            'type' => 'success',
+            'message' => 'Data has been created',
+        ]);
+
     }
 
     /**
@@ -85,6 +205,10 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        $project->delete();
+        return \Redirect::route($this->index_url)->with([
+            'type' => 'success',
+            'message' => 'Data has been deleted',
+        ]);
     }
 }

@@ -15,7 +15,7 @@
         @vite('resources/js/app.jsx')
         @inertiaHead
     </head>
-    <body class="font-sans antialiased bg-light">
+    <body className="font-sans antialiased bg-light" style="background-color:#F8F9FA;height: 100vh">
         @inertia
     </body>
 </html>

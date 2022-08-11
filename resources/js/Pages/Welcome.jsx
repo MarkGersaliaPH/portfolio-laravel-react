@@ -1,6 +1,9 @@
 import React from 'react';
 import { Link, Head } from '@inertiajs/inertia-react';
 
+// import '../css/app.css'; 
+import '../../css/app.css'; 
+
 export default function Welcome(props) {
     return (
         <>
@@ -8,7 +11,7 @@ export default function Welcome(props) {
             <div className="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center sm:pt-0">
                 <div className="fixed top-0 right-0 px-6 py-4 sm:block">
                     {props.auth.user ? (
-                        <Link href={route('dashboard')} className="text-sm text-gray-700 dark:text-gray-500 underline">
+                        <Link href={route('admin.dashboard')} className="text-sm text-gray-700 dark:text-gray-500 underline">
                             Dashboard
                         </Link>
                     ) : (

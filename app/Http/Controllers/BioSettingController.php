@@ -45,22 +45,18 @@ class BioSettingController extends Controller
 
         $request->validate([
             'introduction'=>'required',
-            'profile_picture'=>'image',
-            'cover_picture'=>'image',
+            // 'profile_picture'=>'image',
+            // 'cover_picture'=>'image',
         ]);
 
         $image_path = ''; 
         if ($request->hasFile('profile_picture')) {
-            // dd($request->file('image')->store('images', 'public'));
-            // $profile_picture = $request->file('profile_picture')->storeAs('images','profile_pic.jpg');  
             $image = $request->file('profile_picture');
             $image_name = 'profile_pic.jpg';
             $image->move(public_path('/images'),$image_name); 
             $profile_picture = "/images/" . $image_name;
         }
-        if ($request->hasFile('cover_picture')) {
-            // dd($request->file('image')->store('images', 'public'));
-            // $cover_picture = $request->file('cover_picture')->storeAs('images','cover_pic.jpg');  
+        if ($request->hasFile('cover_picture')) { 
             $image = $request->file('cover_picture');
             $image_name = 'cover_picture.jpg';
             $image->move(public_path('/images'),$image_name); 
@@ -93,9 +89,7 @@ class BioSettingController extends Controller
                 ]);
  
             }
-
-
-
+ 
             \DB::commit();
         } catch (\Throwable $th) {
             //throw $th;
@@ -106,7 +100,7 @@ class BioSettingController extends Controller
     
         return \Redirect::back()->with([
             'type' => 'success',
-            'message' => 'Car has been created',
+            'message' => 'Bio has been updated',
         ]);
     }
 

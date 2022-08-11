@@ -2,3 +2,8 @@ html,body{
     font-family: 'Nunito', sans-serif;
 
 }
+
+.bg-dark{
+    background-color: #34495e !important;
+}
+

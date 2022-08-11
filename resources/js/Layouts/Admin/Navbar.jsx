@@ -13,9 +13,9 @@ function NavbarComponent(props) {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-           <Link className="nav-link active">Dashboard</Link>
+           <Link href={route('admin.dashboard')} className="nav-link active">Dashboard</Link>
             <Link href={route('admin.messages')} className="nav-link">Messages{' '}
-            <span class="badge bg-danger" style={{top:'-10px'}}>4</span>
+            <span className="badge bg-danger" style={{top:'-10px'}}>4</span>
             </Link>
            <Link href={route('admin.companies.index')} className="nav-link" >Companies</Link>
             <Link href={route('admin.projects.index')} className="nav-link">Projects</Link>
@@ -23,7 +23,7 @@ function NavbarComponent(props) {
            <Link href={route('admin.bio-settings.index')} className="nav-link">Bio Settings</Link>
           </Nav>
           <Nav>
-            <Link href={route('logout')} method="post"  className="nav-link">Sign out</Link>
+            <Link href={route('logout')}   className="nav-link">Sign out</Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

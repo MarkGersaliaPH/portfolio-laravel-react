@@ -4,9 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\ProjectSkills;
 class Project extends Model
 {
     use HasFactory;
-    protected $fillable = ['title','description','image'];
+    protected $fillable = ['title','description','image','link'];
+
+    public function skills(){
+        return $this->hasMany(ProjectSkills::class);
+    }
 }

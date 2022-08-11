@@ -28,6 +28,9 @@ Route::get('/', function () {
     ]);
 });
 
+
+
+
 Route::prefix('admin')->middleware(['auth', 'verified'])->name('admin.')->group(function () {
     
     Route::get('/dashboard', function () {
@@ -43,8 +46,12 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->name('admin.')->group(
 
 
     Route::resource('bio-settings', BioSettingController::class); 
-    Route::resource('companies', CompanyController::class); 
-    Route::resource('projects', ProjectController::class); 
+    
+    Route::resource('companies', CompanyController::class)->except('update'); 
+    Route::post('companies/update/{company}', [CompanyController::class,'update'])->name('companies.update'); 
+    Route::resource('projects', ProjectController::class)->except('update'); ;
+    Route::post('projects/update/{project}', [ProjectController::class,'update'])->name('projects.update'); 
+
 });
  
 

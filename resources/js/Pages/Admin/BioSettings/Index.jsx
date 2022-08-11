@@ -14,8 +14,8 @@ function Index(props) {
 
  
     let store_url = route('admin.bio-settings.store');
-    let { errors, flash } = usePage().props;
-    console.log(usePage().props)
+    let { errors, flash } = usePage().props; 
+    
     const { post, reset } = useForm();
   
     const handleChange = (e) => {
@@ -50,11 +50,11 @@ function Index(props) {
         <Authenticated
         auth={props.auth}
         errors={props.errors}
-        header={<h2 className="font-semibold  leading-tight">Bio Settings</h2>}
+        header={<h1 className="fw-bolder  leading-tight">Bio Settings</h1>}
         >
             <Head title="Bio Settings" />
 
-            <div className="card card-body border-0 mb-4 shadow-sm">  
+            <div className="card card-body border-0 mb-4 shadow">  
                 {
                     selectedImage.profile_picture ?
                         <img src={selectedImage.profile_picture} className="img-fluid  rounded-circle shadow-sm mb-4" style={{width:'100px'}}/>
@@ -67,7 +67,7 @@ function Index(props) {
                 {errors && <div className='text-danger mt-1'>{errors.profile_picture}</div>}
             </div>
 
-            <div className="card card-body border-0 mb-4 shadow-sm"> 
+            <div className="card card-body border-0 mb-4 shadow"> 
             {
                     selectedImage.cover_picture ?
                         <img src={selectedImage.cover_picture} className="img-fluid h-50 mb-4" />
@@ -80,7 +80,7 @@ function Index(props) {
                 {errors && <div className='text-danger mt-1'>{errors.cover_picture}</div>}
             </div>
 
-        <div className="card border-0 shadow-sm">
+        <div className="card border-0 shadow mb-5">
             <div className="card-body">
             <form action="">
             <div className="form-group mb-3">
@@ -90,12 +90,13 @@ function Index(props) {
                             {errors && <div className='text-danger mt-1'>{errors.introduction}</div>}        
                 </div>  
             </form>
+            </div> 
             </div>
-            <div className="card-footer bg-white">
-                <button className='btn btn-lg btn-success me-2' onClick={onSubmit}>Submit</button>
-                <button className='btn btn-lg btn-default bg-light border' onClick={clearData}>Clear</button>
-            </div>
-        </div>
+            
+            
+                
+            <button className='btn  btn-success me-2 inline' onClick={onSubmit}>Submit</button>
+                <button className='btn  btn-default bg-light border' onClick={clearData}>Clear</button>
       </Authenticated>
   )
 }
